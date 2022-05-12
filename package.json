@@ -12,7 +12,7 @@
   "engines": {
     "node": "18.1.0"
   },
-  "packageManager": "yarn@3.2.0",
+  "packageManager": "yarn@4.0.0-rc.5",
   "private": true,
   "scripts": {
     "test": "node --loader ts-node/esm --test **/*.test.ts"
