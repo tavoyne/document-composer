@@ -1,0 +1,24 @@
+# Global
+*
+!.gitignore
+
+# Folders
+!/.vscode
+!/src
+
+# Files
+!/.eslintrc.json
+!/.prettierignore
+!/.yarnrc.yml
+!/package.json
+!/tsconfig.json
+!/yarn.lock
+
+# Generated
+!/.yarn
+!/.yarn/plugins
+!/.yarn/plugins/**/*
+!/.yarn/releases
+!/.yarn/releases/**/*
+!/.yarn/sdks
+!/.yarn/sdks/**/*
