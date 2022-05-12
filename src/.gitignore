@@ -4,6 +4,7 @@
 !/placement
 !/rendering
 !/types
+!/utils
 
 # Files
 !/index.ts
