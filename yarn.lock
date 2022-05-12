@@ -40,6 +40,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pdf-lib/fontkit@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@pdf-lib/fontkit@npm:1.1.1"
+  dependencies:
+    pako: ^1.0.6
+  checksum: e37b818ef20b9737d27bd08a54827fd7a54f7796f16b9a39a8fc77ed8a3f0fe9156a72ffefc4bc82856b3fedc141017be75cf49fc21f6a077494cabff347f179
+  languageName: node
+  linkType: hard
+
 "acorn-jsx@npm:^5.3.2":
   version: 5.3.2
   resolution: "acorn-jsx@npm:5.3.2"
@@ -571,6 +580,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pako@npm:^1.0.6":
+  version: 1.0.11
+  resolution: "pako@npm:1.0.11"
+  checksum: 1be2bfa1f807608c7538afa15d6f25baa523c30ec870a3228a89579e474a4d992f4293859524e46d5d87fd30fa17c5edf34dbef0671251d9749820b488660b16
+  languageName: node
+  linkType: hard
+
 "parent-module@npm:^1.0.0":
   version: 1.0.1
   resolution: "parent-module@npm:1.0.1"
@@ -646,6 +662,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@pdf-lib/fontkit": ^1.1.1
     eslint: ^8.15.0
     prettier: ^2.6.2
     typescript: ^4.7.1-rc

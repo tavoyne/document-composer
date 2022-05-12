@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "ES2020",
+    "module": "NodeNext",
     "strict": true,
     "target": "ES2020"
   }
