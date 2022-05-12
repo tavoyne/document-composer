@@ -18,5 +18,3 @@
 !/.yarn
 !/.yarn/releases
 !/.yarn/releases/**/*
-!/.yarn/sdks
-!/.yarn/sdks/**/*
