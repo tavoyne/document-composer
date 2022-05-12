@@ -1,2 +1,8 @@
+# Folders
+!/exploration
+!/placement
+!/rendering
+!/types
+
 # Files
 !/index.ts
