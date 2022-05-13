@@ -8,7 +8,7 @@ import { BlockTooTallError } from "./errors.js";
 import placer from "./placer.js";
 
 test("Breaks page when running into an overflowing block.", () => {
-  const iterator: IterableIterator<Block> = (function* () {
+  const iterator = (function* (): IterableIterator<Block> {
     yield {
       height: 390,
       label: "SPACER",
@@ -60,7 +60,7 @@ test("Breaks page when running into an overflowing block.", () => {
 });
 
 test("Does not break page when running into an overflowing spacing.", () => {
-  const iterator: IterableIterator<Block> = (function* () {
+  const iterator = (function* (): IterableIterator<Block> {
     yield {
       height: 380,
       label: `0_VIEW_ST`,
@@ -120,7 +120,7 @@ test("Does not break page when running into an overflowing spacing.", () => {
 });
 
 test("Outputs the proper elements out of a minimal block list.", () => {
-  const iterator: IterableIterator<Block> = (function* () {
+  const iterator = (function* (): IterableIterator<Block> {
     yield {
       height: 20,
       label: `0_VIEW_ST`,
@@ -180,7 +180,7 @@ test("Outputs the proper elements out of a minimal block list.", () => {
 });
 
 test("Throws when encountering a block that is too tall to be placed.", () => {
-  const iterator: IterableIterator<Block> = (function* () {
+  const iterator = (function* (): IterableIterator<Block> {
     yield {
       element: {
         color: [0, 0, 0, 1],
