@@ -10,6 +10,18 @@ export interface FontSource extends FontLocator {
 
 export type Node = TextNode | ViewNode;
 
+export interface Template {
+  backgroundColor: [number, number, number, number];
+  debug: boolean;
+  fontSources: FontSource[];
+  marginBottom: number;
+  marginLeft: number;
+  marginRight: number;
+  marginTop: number;
+  paperSize: [number, number];
+  rootNode: Node;
+}
+
 export interface TextNode {
   readonly color: [number, number, number, number];
   readonly fontFamily: string;
@@ -39,16 +51,4 @@ export interface ViewNode {
   readonly paddingRight: number;
   readonly paddingTop: number;
   readonly type: "view";
-}
-
-export interface Template {
-  backgroundColor: [number, number, number, number];
-  debug: boolean;
-  fontSources: FontSource[];
-  marginBottom: number;
-  marginLeft: number;
-  marginRight: number;
-  marginTop: number;
-  paperSize: [number, number];
-  rootNode: Node;
 }
