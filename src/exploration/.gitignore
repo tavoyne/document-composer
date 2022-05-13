@@ -4,3 +4,4 @@
 # Files
 !/Explorer.test.ts
 !/Explorer.ts
+!/types.d.ts
