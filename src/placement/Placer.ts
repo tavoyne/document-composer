@@ -2,22 +2,25 @@ import type { Block } from "../types/blocks.js";
 import type { Element } from "../types/elements.js";
 import type { Placement } from "../types/placement.js";
 
-export default function* placer(
-  iterator: IterableIterator<Block>
-): IterableIterator<Element & Placement> {
-  const lookUps: Block[] = [];
-  const marginBottom = 50;
-  const marginTop = 50;
-  const pageHeight = 400;
-  const paperHeight = 500;
-
-  let result = iterator.next();
+export default function* placer({
+  iterator,
+  paperHeight,
+  paperMarginBottom,
+  paperMarginTop,
+}: {
+  iterator: IterableIterator<Block>;
+  paperHeight: number;
+  paperMarginBottom: number;
+  paperMarginTop: number;
+}): IterableIterator<Element & Placement> {
+  const peeks: Block[] = [];
 
   let pageIndex = 0;
-  let y = marginTop;
+  let result = iterator.next();
+  let y = paperMarginTop;
 
-  while (!result.done || lookUps.length) {
-    const block = (lookUps.shift() || result.value!) as Block;
+  while (!result.done || peeks.length) {
+    const block = peeks.shift() || (result.value as Block);
 
     switch (block.type) {
       case "absolute": {
@@ -30,14 +33,12 @@ export default function* placer(
         let minPresenceAhead = block.minPresenceAhead;
 
         while (minPresenceAhead) {
-          let comingBlock: Block | undefined = lookUps[lookUpIndex];
+          let comingBlock: Block | undefined = peeks[lookUpIndex];
           lookUpIndex += 1;
           if (!comingBlock) {
             comingBlock = iterator.next().value;
             if (comingBlock) {
-              if (!lookUps.includes(comingBlock)) {
-                lookUps.push(comingBlock);
-              }
+              peeks.push(comingBlock);
             }
           }
           if (comingBlock) {
@@ -56,14 +57,14 @@ export default function* placer(
           }
         }
 
-        if (groupHeight > pageHeight) {
+        if (groupHeight > paperHeight - paperMarginBottom - paperMarginTop) {
           throw new BlockTooTallError();
         } else if (
           groupHeight + block.spacingTop + y >
-          paperHeight - marginBottom
+          paperHeight - paperMarginBottom
         ) {
           pageIndex += 1;
-          y = marginTop;
+          y = paperMarginTop;
         } else {
           y += block.spacingTop;
         }
@@ -82,7 +83,7 @@ export default function* placer(
       }
     }
 
-    if (!lookUps.length) {
+    if (!peeks.length) {
       result = iterator.next();
     }
   }

@@ -41,7 +41,14 @@ test("Outputs the proper elements out of a minimal block list.", () => {
       type: "relative",
     };
   })();
-  const elements = [...placer(iterator)];
+  const elements = [
+    ...placer({
+      iterator,
+      paperHeight: 500,
+      paperMarginBottom: 50,
+      paperMarginTop: 50,
+    }),
+  ];
   assert.deepStrictEqual(elements, [
     {
       color: [0, 0, 0, 1],
