@@ -12,6 +12,7 @@ export interface FontLocator {
 
 export interface FontRegistry {
   getFont(query: FontLocator): Font;
+  readonly list: Font[];
 }
 
 export interface FontSource extends FontLocator {

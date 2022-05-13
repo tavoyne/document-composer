@@ -1,3 +1,5 @@
 # Files
+!/text.test.ts
 !/text.ts
+!/view.test.ts
 !/view.ts
