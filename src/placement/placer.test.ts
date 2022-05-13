@@ -9,23 +9,23 @@ import placer from "./placer.js";
 test("Outputs the proper elements out of a minimal block list.", () => {
   const iterator: IterableIterator<Block> = (function* () {
     yield {
-      height: 16,
+      height: 20,
       label: `0_VIEW_ST`,
       minPresenceAhead: 1,
       spacingBottom: 0,
-      spacingTop: 8,
+      spacingTop: 20,
       type: "relative",
     };
     yield {
       element: {
         color: [0, 0, 0, 1],
         font: {} as Font,
-        fontSize: 16,
-        text: "Lorem ipsum dolor sit amet",
+        fontSize: 20,
+        text: "Lorem ipsum dolor sit amet.",
         type: "text",
-        x: 32,
+        x: 50,
       },
-      height: 16,
+      height: 20,
       label: `1_TEXT_L0`,
       minPresenceAhead: 1,
       spacingBottom: 0,
@@ -33,10 +33,10 @@ test("Outputs the proper elements out of a minimal block list.", () => {
       type: "relative",
     };
     yield {
-      height: 10,
+      height: 20,
       label: `0_VIEW_SB`,
       minPresenceAhead: 1,
-      spacingBottom: 2,
+      spacingBottom: 20,
       spacingTop: 0,
       type: "relative",
     };
@@ -53,15 +53,127 @@ test("Outputs the proper elements out of a minimal block list.", () => {
     {
       color: [0, 0, 0, 1],
       font: {},
-      fontSize: 16,
-      height: 16,
+      fontSize: 20,
+      height: 20,
       heightAhead: 0,
       heightBehind: 0,
       pageIndex: 0,
-      text: "Lorem ipsum dolor sit amet",
+      text: "Lorem ipsum dolor sit amet.",
       type: "text",
-      x: 32,
-      y: 74,
+      x: 50,
+      y: 90,
+    },
+  ]);
+});
+
+test("Breaks page when running into an overflowing block.", () => {
+  const iterator: IterableIterator<Block> = (function* () {
+    yield {
+      height: 390,
+      label: "SPACER",
+      minPresenceAhead: 0,
+      spacingBottom: 0,
+      spacingTop: 0,
+      type: "relative",
+    };
+    yield {
+      element: {
+        color: [0, 0, 0, 1],
+        font: {} as Font,
+        fontSize: 20,
+        text: "Lorem ipsum dolor sit amet.",
+        type: "text",
+        x: 50,
+      },
+      height: 20,
+      label: `0_TEXT_L0`,
+      minPresenceAhead: 1,
+      spacingBottom: 0,
+      spacingTop: 0,
+      type: "relative",
+    };
+  })();
+  const elements = [
+    ...placer({
+      iterator,
+      paperHeight: 500,
+      paperMarginBottom: 50,
+      paperMarginTop: 50,
+    }),
+  ];
+  assert.deepStrictEqual(elements, [
+    {
+      color: [0, 0, 0, 1],
+      font: {},
+      fontSize: 20,
+      height: 20,
+      heightAhead: 0,
+      heightBehind: 0,
+      pageIndex: 1,
+      text: "Lorem ipsum dolor sit amet.",
+      type: "text",
+      x: 50,
+      y: 50,
+    },
+  ]);
+});
+
+test("Does not break page when running into an overflowing block SB.", () => {
+  const iterator: IterableIterator<Block> = (function* () {
+    yield {
+      height: 380,
+      label: `0_VIEW_ST`,
+      minPresenceAhead: 1,
+      spacingBottom: 0,
+      spacingTop: 0,
+      type: "relative",
+    };
+    yield {
+      element: {
+        color: [0, 0, 0, 1],
+        font: {} as Font,
+        fontSize: 20,
+        text: "Lorem ipsum dolor sit amet.",
+        type: "text",
+        x: 50,
+      },
+      height: 20,
+      label: `1_TEXT_L0`,
+      minPresenceAhead: 1,
+      spacingBottom: 0,
+      spacingTop: 0,
+      type: "relative",
+    };
+    yield {
+      height: 0,
+      label: `0_VIEW_SB`,
+      minPresenceAhead: 1,
+      spacingBottom: 20,
+      spacingTop: 0,
+      type: "relative",
+    };
+  })();
+  const elements = [
+    ...placer({
+      iterator,
+      paperHeight: 500,
+      paperMarginBottom: 50,
+      paperMarginTop: 50,
+    }),
+  ];
+  assert.deepStrictEqual(elements, [
+    {
+      color: [0, 0, 0, 1],
+      font: {},
+      fontSize: 20,
+      height: 20,
+      heightAhead: 0,
+      heightBehind: 0,
+      pageIndex: 0,
+      text: "Lorem ipsum dolor sit amet.",
+      type: "text",
+      x: 50,
+      y: 430,
     },
   ]);
 });
