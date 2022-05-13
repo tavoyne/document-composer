@@ -40,6 +40,7 @@ export default function* textUnit({
       spacingTop: 0,
       type: "relative",
     };
+    lineId += 1;
   }
 
   if (block) {
