@@ -2,6 +2,8 @@ import type { Block } from "../types/blocks.js";
 import type { Element } from "../types/elements.js";
 import type { Placement } from "../types/placement.js";
 
+import { BlockTooTallError } from "./errors.js";
+
 export default function* placer({
   iterator,
   paperHeight,
@@ -86,11 +88,5 @@ export default function* placer({
     if (!peeks.length) {
       result = iterator.next();
     }
-  }
-}
-
-class BlockTooTallError extends Error {
-  constructor() {
-    super("Block cannot be placed because it's too tall.");
   }
 }

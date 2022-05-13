@@ -4,6 +4,7 @@ import test from "node:test";
 
 import { Block } from "../types/blocks.d.js";
 import { Font } from "../types/font.d.js";
+import { BlockTooTallError } from "./errors.js";
 import placer from "./placer.js";
 
 test("Outputs the proper elements out of a minimal block list.", () => {
@@ -118,7 +119,7 @@ test("Breaks page when running into an overflowing block.", () => {
   ]);
 });
 
-test("Does not break page when running into an overflowing block SB.", () => {
+test("Does not break page when running into an overflowing spacing.", () => {
   const iterator: IterableIterator<Block> = (function* () {
     yield {
       height: 380,
@@ -176,4 +177,35 @@ test("Does not break page when running into an overflowing block SB.", () => {
       y: 430,
     },
   ]);
+});
+
+test("Throws when encountering a block that is too tall to be placed.", () => {
+  const iterator: IterableIterator<Block> = (function* () {
+    yield {
+      element: {
+        color: [0, 0, 0, 1],
+        font: {} as Font,
+        fontSize: 20,
+        text: "Lorem ipsum dolor sit amet.",
+        type: "text",
+        x: 50,
+      },
+      height: 420,
+      label: `0_TEXT_L0`,
+      minPresenceAhead: 1,
+      spacingBottom: 0,
+      spacingTop: 0,
+      type: "relative",
+    };
+  })();
+  assert.throws(() => {
+    return [
+      ...placer({
+        iterator,
+        paperHeight: 500,
+        paperMarginBottom: 50,
+        paperMarginTop: 50,
+      }),
+    ];
+  }, BlockTooTallError);
 });

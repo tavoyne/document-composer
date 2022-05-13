@@ -1,3 +1,4 @@
 # Files
+!/errors.ts
 !/placer.ts
 !/placer.test.ts
