@@ -1,6 +1,5 @@
-import fontkit from "@pdf-lib/fontkit";
 import type { Font as FontkitFont } from "@pdf-lib/fontkit";
-
+import fontkit from "@pdf-lib/fontkit";
 import type {
   Font as IFont,
   FontLocator,

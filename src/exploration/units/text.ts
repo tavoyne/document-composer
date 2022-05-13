@@ -1,8 +1,7 @@
-import getLines from "../../utils/getLines.js";
-
-import type { UnitContext, UnitReturnType } from "../Explorer.js";
 import type { RelativeBlock } from "../../types/blocks.d.js";
 import type { TextNode } from "../../types/nodes.d.js";
+import getLines from "../../utils/getLines.js";
+import type { UnitContext, UnitReturnType } from "../Explorer.js";
 
 export default function* textUnit({
   fontRegistry,

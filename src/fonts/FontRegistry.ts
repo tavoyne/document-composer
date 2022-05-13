@@ -1,10 +1,9 @@
-import Font from "./Font.js";
-
 import type {
-  FontRegistry as IFontRegistry,
   FontLocator,
+  FontRegistry as IFontRegistry,
   FontSource,
 } from "../types/font.d.js";
+import Font from "./Font.js";
 
 export default class FontRegistry implements IFontRegistry {
   readonly list: readonly Font[];

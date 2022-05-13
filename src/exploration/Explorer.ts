@@ -1,9 +1,8 @@
+import type { Block } from "../types/blocks.d.js";
+import type { FontRegistry } from "../types/font.d.js";
+import type { Node } from "../types/nodes.d.js";
 import textUnit from "./units/text.js";
 import viewUnit from "./units/view.js";
-
-import type { FontRegistry } from "../types/font.d.js";
-import type { Block } from "../types/blocks.d.js";
-import type { Node } from "../types/nodes.d.js";
 
 interface ExploreContext {
   maxWidth: number;

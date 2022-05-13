@@ -1,5 +1,4 @@
 import type { ViewNode } from "../../types/nodes.d.js";
-
 import type { UnitContext, UnitReturnType } from "../Explorer.js";
 
 export default function* viewUnit({
