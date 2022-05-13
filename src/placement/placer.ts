@@ -16,6 +16,7 @@ export default function* placer({
   paperMarginTop: number;
 }): IterableIterator<Element & Placement> {
   const peeks: Block[] = [];
+  const absolute = new Map<string, [Block, number][]>();
 
   let pageIndex = 0;
   let result = iterator.next();
@@ -23,9 +24,14 @@ export default function* placer({
 
   while (!result.done || peeks.length) {
     const block = peeks.shift() || (result.value as Block);
-
     switch (block.type) {
       case "absolute": {
+        const array = absolute.get(block.endBlockLabel);
+        if (array) {
+          array.push([block, y]);
+        } else {
+          absolute.set(block.endBlockLabel, [[block, y]]);
+        }
         break;
       }
       case "relative": {
@@ -58,7 +64,6 @@ export default function* placer({
             minPresenceAhead = 0;
           }
         }
-
         if (groupHeight > paperHeight - paperMarginBottom - paperMarginTop) {
           throw new BlockTooTallError();
         } else if (
