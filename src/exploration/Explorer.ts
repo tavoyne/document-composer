@@ -23,10 +23,12 @@ export default class Explorer {
       x,
     };
     switch (node.type) {
-      case "text":
+      case "text": {
         return textUnit({ ...partialContext, node });
-      case "view":
+      }
+      case "view": {
         return viewUnit({ ...partialContext, node });
+      }
     }
   }
 }
