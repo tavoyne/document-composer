@@ -3,5 +3,5 @@ import type { FontLocator } from "./template.d.js";
 
 export interface FontRegistry {
   getFont(query: FontLocator): Font;
-  readonly list: Font[];
+  readonly list: readonly Font[];
 }
