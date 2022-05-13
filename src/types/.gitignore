@@ -3,4 +3,5 @@
 !/elements.d.ts
 !/font.d.ts
 !/fontRegistry.d.ts
+!/placement.d.ts
 !/template.d.ts

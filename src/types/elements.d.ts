@@ -1,13 +1,5 @@
 import type { Font } from "./font.d.js";
 
-export interface VerticalPosition {
-  readonly height: number;
-  readonly heightAhead: number;
-  readonly heightBehind: number;
-  readonly pageIndex: number;
-  readonly y: number;
-}
-
 export interface RectangleElement {
   readonly borderBottomLeftRadius: number;
   readonly borderBottomRightRadius: number;
