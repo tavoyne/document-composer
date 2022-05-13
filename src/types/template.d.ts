@@ -50,5 +50,5 @@ export interface Template {
   marginRight: number;
   marginTop: number;
   paperSize: [number, number];
-  rootNode: TextNode | ViewNode;
+  rootNode: Node;
 }
