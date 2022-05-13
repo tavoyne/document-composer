@@ -9,8 +9,8 @@ const fontRegistry: FontRegistry = {
       getTextWidthAtSize(text: string, size: number) {
         return (text.length * size) / 16;
       },
-      getBaselineShiftAtSize() {
-        return 0;
+      getBaselineShiftAtSize(size: number) {
+        return 0.75 * size;
       },
     },
   ],
