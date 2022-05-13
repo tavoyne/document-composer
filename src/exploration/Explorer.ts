@@ -1,5 +1,5 @@
-import type { FontRegistry } from "../types/font.d.js";
-import type { ExploreContext, UnitReturnType } from "./types.js";
+import type { FontRegistry } from "../types/fontRegistry.d.js";
+import type { ExploreContext, UnitReturnType } from "./types.d.js";
 import textUnit from "./units/text.js";
 import viewUnit from "./units/view.js";
 

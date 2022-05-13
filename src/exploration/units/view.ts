@@ -1,4 +1,4 @@
-import type { ViewNode } from "../../types/nodes.d.js";
+import type { ViewNode } from "../../types/template.d.js";
 import type { UnitContext, UnitReturnType } from "../types.d.js";
 
 export default function* viewUnit({

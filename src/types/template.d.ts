@@ -1,3 +1,15 @@
+export interface FontLocator {
+  readonly fontFamily: string;
+  readonly fontStyle: "normal" | "italic";
+  readonly fontWeight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+}
+
+export interface FontSource extends FontLocator {
+  url: string;
+}
+
+export type Node = TextNode | ViewNode;
+
 export interface TextNode {
   readonly color: [number, number, number, number];
   readonly fontFamily: string;
@@ -29,4 +41,14 @@ export interface ViewNode {
   readonly type: "view";
 }
 
-export type Node = TextNode | ViewNode;
+export interface Template {
+  backgroundColor: [number, number, number, number];
+  debug: boolean;
+  fontSources: FontSource[];
+  marginBottom: number;
+  marginLeft: number;
+  marginRight: number;
+  marginTop: number;
+  paperSize: [number, number];
+  rootNode: TextNode | ViewNode;
+}

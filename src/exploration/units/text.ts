@@ -1,5 +1,5 @@
 import type { RelativeBlock } from "../../types/blocks.d.js";
-import type { TextNode } from "../../types/nodes.d.js";
+import type { TextNode } from "../../types/template.d.js";
 import getLines from "../../utils/getLines.js";
 import type { UnitContext, UnitReturnType } from "../types.d.js";
 

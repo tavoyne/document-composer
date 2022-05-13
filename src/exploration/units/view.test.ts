@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 // @ts-ignore
 import test from "node:test";
 
-import { FontRegistry } from "../../types/font.d.js";
-import type { ViewNode } from "../../types/nodes.js";
+import type { FontRegistry } from "../../types/fontRegistry.d.js";
+import type { ViewNode } from "../../types/template.d.js";
 import viewUnit from "./view.js";
 
 test("Outputs the proper blocks out of a single node.", () => {

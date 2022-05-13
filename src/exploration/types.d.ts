@@ -1,6 +1,6 @@
-import type { Block } from "../types/blocks.js";
-import type { FontRegistry } from "../types/font.js";
-import type { Node } from "../types/nodes.js";
+import type { Block } from "../types/blocks.d.js";
+import type { FontRegistry } from "../types/fontRegistry.d.js";
+import type { Node } from "../types/template.d.js";
 
 export interface ExploreContext {
   maxWidth: number;

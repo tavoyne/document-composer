@@ -1,5 +1,6 @@
 # Files
 !/blocks.d.ts
-!/font.d.ts
 !/elements.d.ts
-!/nodes.d.ts
+!/font.d.ts
+!/fontRegistry.d.ts
+!/template.d.ts
