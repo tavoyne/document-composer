@@ -6,7 +6,7 @@ import { FontRegistry } from "../../types/font.d.js";
 import type { ViewNode } from "../../types/nodes.js";
 import viewUnit from "./view.js";
 
-test("Should output the proper blocks out of a single ViewNode.", () => {
+test("Outputs the proper blocks out of a single node.", () => {
   const rootNode: ViewNode = {
     backgroundColor: [255, 0, 0, 1],
     borderBottomLeftRadius: 1,
