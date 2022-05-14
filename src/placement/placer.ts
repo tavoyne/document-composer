@@ -15,8 +15,11 @@ export default function* placer({
   paperMarginBottom: number;
   paperMarginTop: number;
 }): IterableIterator<Element & Placement> {
+  const bodyHeight = paperHeight - paperMarginBottom - paperMarginTop;
+  const footlessHeight = paperHeight - paperMarginBottom;
+
   const peeks: Block[] = [];
-  const absolute = new Map<string, [Block, number][]>();
+  const absoluteMap = new Map<string, [Block, number][]>();
 
   let pageIndex = 0;
   let result = iterator.next();
@@ -26,55 +29,65 @@ export default function* placer({
     const block = peeks.shift() || (result.value as Block);
     switch (block.type) {
       case "absolute": {
-        const array = absolute.get(block.endBlockLabel);
+        const array = absoluteMap.get(block.endBlockLabel);
         if (array) {
           array.push([block, y]);
         } else {
-          absolute.set(block.endBlockLabel, [[block, y]]);
+          absoluteMap.set(block.endBlockLabel, [[block, y]]);
         }
         break;
       }
       case "relative": {
+        let { minPresenceAhead } = block;
         let groupHeight =
-          block.height + (block.minPresenceAhead && block.spacingBottom);
-        let lookUpIndex = 0;
-        let minPresenceAhead = block.minPresenceAhead;
+          block.height + (minPresenceAhead && block.spacingBottom);
+        let peekIndex = peeks.length ? 0 : null;
 
         while (minPresenceAhead) {
-          let comingBlock: Block | undefined = peeks[lookUpIndex];
-          lookUpIndex += 1;
-          if (!comingBlock) {
-            comingBlock = iterator.next().value;
-            if (comingBlock) {
-              peeks.push(comingBlock);
-            }
-          }
-          if (comingBlock) {
-            if (comingBlock.type === "relative") {
-              minPresenceAhead = Math.max(
-                minPresenceAhead - 1,
-                block.minPresenceAhead
-              );
-              groupHeight +=
-                comingBlock.height +
-                block.spacingTop +
-                (minPresenceAhead && block.spacingBottom);
-            }
+          let comingBlock: Block | undefined;
+
+          if (typeof peekIndex === "number") {
+            comingBlock = peeks[peekIndex];
+            peekIndex = peeks.length - 1 - peekIndex || null;
           } else {
+            const { value } = iterator.next();
+            comingBlock = value && peeks.push(value);
+          }
+
+          if (!comingBlock) {
             minPresenceAhead = 0;
+          } else if (comingBlock.type === "relative") {
+            minPresenceAhead = Math.max(
+              minPresenceAhead - 1,
+              comingBlock.minPresenceAhead
+            );
+            groupHeight +=
+              comingBlock.height +
+              block.spacingTop +
+              (minPresenceAhead && block.spacingBottom);
           }
         }
-        if (groupHeight > paperHeight - paperMarginBottom - paperMarginTop) {
-          throw new BlockTooTallError();
-        } else if (
-          groupHeight + block.spacingTop + y >
-          paperHeight - paperMarginBottom
-        ) {
-          pageIndex += 1;
-          y = paperMarginTop;
-        } else {
+
+        if (y !== paperMarginTop) {
           y += block.spacingTop;
         }
+
+        if (groupHeight > bodyHeight) {
+          throw new BlockTooTallError();
+        } else if (groupHeight + y > footlessHeight) {
+          // THIS IS PAGE BREAK
+          // PRINT ALL ABSOLUTES BEFORE COMING BLOCK
+          // UNLESS THEY HAVE LOOKAHEAD... HOW DO WE DO? STORE THEM IN A PENDING ARRAY.
+          // KEEP TRACK OF THE LOOKAHEAD AMOUNT.
+          // KEEP LOOPING TILL LOOKAHEAD IS NOT REACHED.
+          // ONCE IT IS, EMPTY PENDING ARRAY.
+          pageIndex += 1;
+          y = paperMarginTop;
+        }
+        // WAS THIS THE ENDING BLOCK OF SOME ABSOLUTE(S) ?
+        // PRINT IT (THEM) HERE!
+        // HEIGHT_AHEAD WILL BE 0;
+        // SHOULD RETREIVE THE HEIGHT_BEHIND SOMEHOW.
         if (block.element) {
           yield {
             ...block.element,

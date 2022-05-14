@@ -174,7 +174,7 @@ test("Outputs the proper elements out of a minimal block list.", () => {
       text: "Lorem ipsum dolor sit amet.",
       type: "text",
       x: 50,
-      y: 90,
+      y: 70,
     },
   ]);
 });
