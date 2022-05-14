@@ -9,10 +9,6 @@ import viewUnit from "./view.js";
 test("Outputs the proper blocks out of a single node.", () => {
   const rootNode: ViewNode = {
     backgroundColor: [255, 0, 0, 1],
-    borderBottomLeftRadius: 1,
-    borderBottomRightRadius: 2,
-    borderTopLeftRadius: 3,
-    borderTopRightRadius: 4,
     children: [],
     marginBottom: 2,
     marginLeft: 4,
@@ -38,10 +34,6 @@ test("Outputs the proper blocks out of a single node.", () => {
   assert.deepStrictEqual(blocks, [
     {
       element: {
-        borderBottomLeftRadius: 1,
-        borderBottomRightRadius: 2,
-        borderTopLeftRadius: 3,
-        borderTopRightRadius: 4,
         color: [255, 0, 0, 1],
         type: "rectangle",
         width: 246,
@@ -49,7 +41,6 @@ test("Outputs the proper blocks out of a single node.", () => {
       },
       endBlockLabel: "0_VIEW_SB",
       label: "0_VIEW_BG",
-      lookAhead: 2,
       type: "absolute",
     },
     {

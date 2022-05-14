@@ -27,7 +27,7 @@ test("Breaks page when running into an overflowing block.", () => {
         x: 50,
       },
       height: 20,
-      label: `0_TEXT_L0`,
+      label: "0_TEXT_L0",
       minPresenceAhead: 1,
       spacingBottom: 0,
       spacingTop: 0,
@@ -48,8 +48,6 @@ test("Breaks page when running into an overflowing block.", () => {
       font: {},
       fontSize: 20,
       height: 20,
-      heightAhead: 0,
-      heightBehind: 0,
       pageIndex: 1,
       text: "Lorem ipsum dolor sit amet.",
       type: "text",
@@ -63,7 +61,7 @@ test("Does not break page when running into an overflowing spacing.", () => {
   const iterator = (function* (): IterableIterator<Block> {
     yield {
       height: 380,
-      label: `0_VIEW_ST`,
+      label: "0_VIEW_ST",
       minPresenceAhead: 1,
       spacingBottom: 0,
       spacingTop: 0,
@@ -79,7 +77,7 @@ test("Does not break page when running into an overflowing spacing.", () => {
         x: 50,
       },
       height: 20,
-      label: `1_TEXT_L0`,
+      label: "1_TEXT_L0",
       minPresenceAhead: 1,
       spacingBottom: 0,
       spacingTop: 0,
@@ -87,7 +85,7 @@ test("Does not break page when running into an overflowing spacing.", () => {
     };
     yield {
       height: 0,
-      label: `0_VIEW_SB`,
+      label: "0_VIEW_SB",
       minPresenceAhead: 1,
       spacingBottom: 20,
       spacingTop: 0,
@@ -108,8 +106,6 @@ test("Does not break page when running into an overflowing spacing.", () => {
       font: {},
       fontSize: 20,
       height: 20,
-      heightAhead: 0,
-      heightBehind: 0,
       pageIndex: 0,
       text: "Lorem ipsum dolor sit amet.",
       type: "text",
@@ -123,7 +119,7 @@ test("Outputs the proper elements out of a minimal block list.", () => {
   const iterator = (function* (): IterableIterator<Block> {
     yield {
       height: 20,
-      label: `0_VIEW_ST`,
+      label: "0_VIEW_ST",
       minPresenceAhead: 1,
       spacingBottom: 0,
       spacingTop: 20,
@@ -139,7 +135,7 @@ test("Outputs the proper elements out of a minimal block list.", () => {
         x: 50,
       },
       height: 20,
-      label: `1_TEXT_L0`,
+      label: "1_TEXT_L0",
       minPresenceAhead: 1,
       spacingBottom: 0,
       spacingTop: 0,
@@ -147,7 +143,7 @@ test("Outputs the proper elements out of a minimal block list.", () => {
     };
     yield {
       height: 20,
-      label: `0_VIEW_SB`,
+      label: "0_VIEW_SB",
       minPresenceAhead: 1,
       spacingBottom: 20,
       spacingTop: 0,
@@ -168,8 +164,6 @@ test("Outputs the proper elements out of a minimal block list.", () => {
       font: {},
       fontSize: 20,
       height: 20,
-      heightAhead: 0,
-      heightBehind: 0,
       pageIndex: 0,
       text: "Lorem ipsum dolor sit amet.",
       type: "text",
@@ -179,210 +173,178 @@ test("Outputs the proper elements out of a minimal block list.", () => {
   ]);
 });
 
-test("Outputs the proper elements out of a minimal block list with background.", () => {
-  const iterator = (function* (): IterableIterator<Block> {
-    yield {
-      element: {
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
-        color: [255, 0, 0, 1],
-        type: "rectangle",
-        width: 250,
-        x: 50,
-      },
-      endBlockLabel: `0_VIEW_SB`,
-      label: `0_VIEW_BG`,
-      lookAhead: 0,
-      type: "absolute",
-    };
-    yield {
-      height: 20,
-      label: `0_VIEW_ST`,
-      minPresenceAhead: 1,
-      spacingBottom: 0,
-      spacingTop: 20,
-      type: "relative",
-    };
-    yield {
-      element: {
-        color: [0, 0, 0, 1],
-        font: {} as Font,
-        fontSize: 20,
-        text: "Lorem ipsum dolor sit amet.",
-        type: "text",
-        x: 50,
-      },
-      height: 20,
-      label: `1_TEXT_L0`,
-      minPresenceAhead: 1,
-      spacingBottom: 0,
-      spacingTop: 0,
-      type: "relative",
-    };
-    yield {
-      height: 20,
-      label: `0_VIEW_SB`,
-      minPresenceAhead: 1,
-      spacingBottom: 20,
-      spacingTop: 0,
-      type: "relative",
-    };
-  })();
-  const elements = [
-    ...placer({
-      iterator,
-      paperHeight: 500,
-      paperMarginBottom: 50,
-      paperMarginTop: 50,
-    }),
-  ];
-  assert.deepStrictEqual(elements, [
-    {
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 0,
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 0,
-      color: [255, 0, 0, 1],
-      height: 60,
-      heightAhead: 0,
-      heightBehind: 0,
-      pageIndex: 0,
-      type: "rectangle",
-      width: 250,
-      x: 50,
-      y: 70,
-    },
-    {
-      color: [0, 0, 0, 1],
-      font: {},
-      fontSize: 20,
-      height: 20,
-      heightAhead: 0,
-      heightBehind: 0,
-      pageIndex: 0,
-      text: "Lorem ipsum dolor sit amet.",
-      type: "text",
-      x: 50,
-      y: 90,
-    },
-  ]);
-});
+// test("Outputs the proper elements out of a minimal block list with background.", () => {
+//   const iterator = (function* (): IterableIterator<Block> {
+//     yield {
+//       element: {
+//         color: [255, 0, 0, 1],
+//         type: "rectangle",
+//         width: 250,
+//         x: 50,
+//       },
+//       endBlockLabel: "0_VIEW_SB",
+//       label: "0_VIEW_BG",
+//       type: "absolute",
+//     };
+//     yield {
+//       height: 20,
+//       label: "0_VIEW_ST",
+//       minPresenceAhead: 1,
+//       spacingBottom: 0,
+//       spacingTop: 20,
+//       type: "relative",
+//     };
+//     yield {
+//       element: {
+//         color: [0, 0, 0, 1],
+//         font: {} as Font,
+//         fontSize: 20,
+//         text: "Lorem ipsum dolor sit amet.",
+//         type: "text",
+//         x: 50,
+//       },
+//       height: 20,
+//       label: "1_TEXT_L0",
+//       minPresenceAhead: 1,
+//       spacingBottom: 0,
+//       spacingTop: 0,
+//       type: "relative",
+//     };
+//     yield {
+//       height: 20,
+//       label: "0_VIEW_SB",
+//       minPresenceAhead: 1,
+//       spacingBottom: 20,
+//       spacingTop: 0,
+//       type: "relative",
+//     };
+//   })();
+//   const elements = [
+//     ...placer({
+//       iterator,
+//       paperHeight: 500,
+//       paperMarginBottom: 50,
+//       paperMarginTop: 50,
+//     }),
+//   ];
+//   assert.deepStrictEqual(elements, [
+//     {
+//       color: [255, 0, 0, 1],
+//       height: 60,
+//       pageIndex: 0,
+//       type: "rectangle",
+//       width: 250,
+//       x: 50,
+//       y: 70,
+//     },
+//     {
+//       color: [0, 0, 0, 1],
+//       font: {},
+//       fontSize: 20,
+//       height: 20,
+//       pageIndex: 0,
+//       text: "Lorem ipsum dolor sit amet.",
+//       type: "text",
+//       x: 50,
+//       y: 90,
+//     },
+//   ]);
+// });
 
-test("Outputs the proper elements out of a minimal block list with background spanning multiple pages.", () => {
-  const iterator = (function* (): IterableIterator<Block> {
-    yield {
-      element: {
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        color: [255, 0, 0, 1],
-        type: "rectangle",
-        width: 250,
-        x: 50,
-      },
-      endBlockLabel: `0_VIEW_SB`,
-      label: `0_VIEW_BG`,
-      lookAhead: 10,
-      type: "absolute",
-    };
-    yield {
-      height: 20,
-      label: `0_VIEW_ST`,
-      minPresenceAhead: 1,
-      spacingBottom: 0,
-      spacingTop: 20,
-      type: "relative",
-    };
-    yield {
-      height: 350,
-      label: "SPACER",
-      minPresenceAhead: 0,
-      spacingBottom: 0,
-      spacingTop: 0,
-      type: "relative",
-    };
-    yield {
-      element: {
-        color: [0, 0, 0, 1],
-        font: {} as Font,
-        fontSize: 20,
-        text: "Lorem ipsum dolor sit amet.",
-        type: "text",
-        x: 50,
-      },
-      height: 20,
-      label: `1_TEXT_L0`,
-      minPresenceAhead: 1,
-      spacingBottom: 0,
-      spacingTop: 0,
-      type: "relative",
-    };
-    yield {
-      height: 20,
-      label: `0_VIEW_SB`,
-      minPresenceAhead: 1,
-      spacingBottom: 20,
-      spacingTop: 0,
-      type: "relative",
-    };
-  })();
-  const elements = [
-    ...placer({
-      iterator,
-      paperHeight: 500,
-      paperMarginBottom: 50,
-      paperMarginTop: 50,
-    }),
-  ];
-  assert.deepStrictEqual(elements, [
-    {
-      borderBottomLeftRadius: 10,
-      borderBottomRightRadius: 10,
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-      color: [255, 0, 0, 1],
-      height: 380,
-      heightAhead: 20,
-      heightBehind: 0,
-      pageIndex: 0,
-      type: "rectangle",
-      width: 250,
-      x: 50,
-      y: 70,
-    },
-    {
-      borderBottomLeftRadius: 10,
-      borderBottomRightRadius: 10,
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-      color: [255, 0, 0, 1],
-      height: 40,
-      heightAhead: 0,
-      heightBehind: 380,
-      pageIndex: 1,
-      type: "rectangle",
-      width: 250,
-      x: 50,
-      y: 50,
-    },
-    {
-      color: [0, 0, 0, 1],
-      font: {},
-      fontSize: 20,
-      height: 20,
-      heightAhead: 0,
-      heightBehind: 0,
-      pageIndex: 1,
-      text: "Lorem ipsum dolor sit amet.",
-      type: "text",
-      x: 50,
-      y: 50,
-    },
-  ]);
-});
+// test("Outputs the proper elements out of a minimal block list with background spanning multiple pages.", () => {
+//   const iterator = (function* (): IterableIterator<Block> {
+//     yield {
+//       element: {
+//         color: [255, 0, 0, 1],
+//         type: "rectangle",
+//         width: 250,
+//         x: 50,
+//       },
+//       endBlockLabel: "0_VIEW_SB",
+//       label: "0_VIEW_BG",
+//       type: "absolute",
+//     };
+//     yield {
+//       height: 20,
+//       label: "0_VIEW_ST",
+//       minPresenceAhead: 1,
+//       spacingBottom: 0,
+//       spacingTop: 20,
+//       type: "relative",
+//     };
+//     yield {
+//       height: 350,
+//       label: "SPACER",
+//       minPresenceAhead: 0,
+//       spacingBottom: 0,
+//       spacingTop: 0,
+//       type: "relative",
+//     };
+//     yield {
+//       element: {
+//         color: [0, 0, 0, 1],
+//         font: {} as Font,
+//         fontSize: 20,
+//         text: "Lorem ipsum dolor sit amet.",
+//         type: "text",
+//         x: 50,
+//       },
+//       height: 20,
+//       label: "1_TEXT_L0",
+//       minPresenceAhead: 1,
+//       spacingBottom: 0,
+//       spacingTop: 0,
+//       type: "relative",
+//     };
+//     yield {
+//       height: 20,
+//       label: "0_VIEW_SB",
+//       minPresenceAhead: 1,
+//       spacingBottom: 20,
+//       spacingTop: 0,
+//       type: "relative",
+//     };
+//   })();
+//   const elements = [
+//     ...placer({
+//       iterator,
+//       paperHeight: 500,
+//       paperMarginBottom: 50,
+//       paperMarginTop: 50,
+//     }),
+//   ];
+//   assert.deepStrictEqual(elements, [
+//     {
+//       color: [255, 0, 0, 1],
+//       height: 380,
+//       pageIndex: 0,
+//       type: "rectangle",
+//       width: 250,
+//       x: 50,
+//       y: 70,
+//     },
+//     {
+//       color: [255, 0, 0, 1],
+//       height: 40,
+//       pageIndex: 1,
+//       type: "rectangle",
+//       width: 250,
+//       x: 50,
+//       y: 50,
+//     },
+//     {
+//       color: [0, 0, 0, 1],
+//       font: {},
+//       fontSize: 20,
+//       height: 20,
+//       pageIndex: 1,
+//       text: "Lorem ipsum dolor sit amet.",
+//       type: "text",
+//       x: 50,
+//       y: 50,
+//     },
+//   ]);
+// });
 
 test("Throws when encountering a block that is too tall to be placed.", () => {
   const iterator = (function* (): IterableIterator<Block> {
@@ -396,7 +358,7 @@ test("Throws when encountering a block that is too tall to be placed.", () => {
         x: 50,
       },
       height: 420,
-      label: `0_TEXT_L0`,
+      label: "0_TEXT_L0",
       minPresenceAhead: 1,
       spacingBottom: 0,
       spacingTop: 0,

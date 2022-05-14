@@ -11,10 +11,6 @@ export default function* viewUnit({
   if (node.backgroundColor[3]) {
     yield {
       element: {
-        borderBottomLeftRadius: node.borderBottomLeftRadius,
-        borderBottomRightRadius: node.borderBottomRightRadius,
-        borderTopLeftRadius: node.borderTopLeftRadius,
-        borderTopRightRadius: node.borderTopRightRadius,
         color: node.backgroundColor,
         type: "rectangle",
         width: maxWidth - node.marginLeft - node.marginRight,
@@ -22,10 +18,6 @@ export default function* viewUnit({
       },
       endBlockLabel: `${id}_${node.type.toUpperCase()}_SB`,
       label: `${id}_${node.type.toUpperCase()}_BG`,
-      lookAhead: Math.max(
-        node.borderBottomLeftRadius,
-        node.borderBottomRightRadius
-      ),
       type: "absolute",
     };
   }

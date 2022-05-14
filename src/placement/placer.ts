@@ -92,8 +92,6 @@ export default function* placer({
           yield {
             ...block.element,
             height: block.height,
-            heightAhead: 0,
-            heightBehind: 0,
             pageIndex,
             y,
           };

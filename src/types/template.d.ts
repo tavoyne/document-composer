@@ -36,10 +36,6 @@ export interface TextNode {
 
 export interface ViewNode {
   readonly backgroundColor: [number, number, number, number];
-  readonly borderBottomLeftRadius: number;
-  readonly borderBottomRightRadius: number;
-  readonly borderTopLeftRadius: number;
-  readonly borderTopRightRadius: number;
   readonly children: Node[];
   readonly marginBottom: number;
   readonly marginLeft: number;

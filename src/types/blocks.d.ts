@@ -4,7 +4,6 @@ export interface AbsoluteBlock {
   readonly element: Element;
   readonly endBlockLabel: string;
   readonly label: string;
-  readonly lookAhead: "max" | number;
   readonly type: "absolute";
 }
 
