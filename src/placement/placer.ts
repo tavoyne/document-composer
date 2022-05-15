@@ -45,16 +45,16 @@ export default function* placer({
 
       case "relative": {
         let accHeight: number;
-        let accPresence: number;
+        let leftToBeProcess: number;
         let peekIndex: number;
 
         accHeight = block.height;
         accHeight += block.minPresenceAhead && block.spacingBottom;
-        accPresence = block.minPresenceAhead;
+        leftToBeProcess = block.minPresenceAhead;
         peekIndex = 0;
 
-        while (accPresence) {
-          let nextBlock: Block | null;
+        while (leftToBeProcess) {
+          let nextBlock: Block;
 
           if (peeks[peekIndex]) {
             nextBlock = peeks[peekIndex];
@@ -63,20 +63,21 @@ export default function* placer({
             peekIndex = -1;
             const result = iterator.next();
             if (result.done) {
-              nextBlock = null;
+              break;
             } else {
               nextBlock = result.value;
               peeks.push(nextBlock);
             }
           }
 
-          if (!nextBlock) break;
-
           if (nextBlock.type === "relative") {
-            accPresence = Math.max(accPresence - 1, nextBlock.minPresenceAhead);
+            leftToBeProcess = Math.max(
+              leftToBeProcess - 1,
+              nextBlock.minPresenceAhead
+            );
             accHeight += nextBlock.height;
             accHeight += nextBlock.spacingTop;
-            accHeight += accPresence && nextBlock.spacingBottom;
+            accHeight += leftToBeProcess && nextBlock.spacingBottom;
           }
         }
 
