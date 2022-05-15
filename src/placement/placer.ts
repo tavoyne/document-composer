@@ -21,13 +21,15 @@ export default function* placer({
   const peeks: Block[] = [];
   const startAbsoluteMap = new Map<string, AbsoluteBlock[]>();
 
-  let pageIndex = 0;
-  let result = iterator.next();
-  let y = paperMarginTop;
+  let pageIndex: number;
+  let y: number;
+  let block: Block | null;
 
-  while (!result.done || peeks.length) {
-    const block = peeks.shift() || (result.value as Block);
+  pageIndex = 0;
+  y = paperMarginTop;
+  block = iterator.next().value || null;
 
+  while (block) {
     switch (block.type) {
       case "absolute": {
         const blocks = startAbsoluteMap.get(block.startBlockLabel);
@@ -40,36 +42,41 @@ export default function* placer({
 
         break;
       }
+
       case "relative": {
-        let { minPresenceAhead } = block;
-        let groupHeight =
-          block.height + (minPresenceAhead && block.spacingBottom);
-        let peekIndex = peeks.length ? 0 : null;
+        let accHeight: number;
+        let accPresence: number;
+        let peekIndex: number;
 
-        while (minPresenceAhead) {
-          let comingBlock: Block | undefined;
+        accHeight = block.height;
+        accHeight += block.minPresenceAhead && block.spacingBottom;
+        accPresence = block.minPresenceAhead;
+        peekIndex = 0;
 
-          if (typeof peekIndex === "number") {
-            comingBlock = peeks[peekIndex];
-            peekIndex = peeks.length > peekIndex + 1 ? peekIndex + 1 : null;
+        while (accPresence) {
+          let nextBlock: Block | null;
+
+          if (peeks[peekIndex]) {
+            nextBlock = peeks[peekIndex];
+            peekIndex += 1;
           } else {
-            comingBlock = iterator.next().value;
-            if (comingBlock) {
-              peeks.push(comingBlock);
+            peekIndex = -1;
+            const result = iterator.next();
+            if (result.done) {
+              nextBlock = null;
+            } else {
+              nextBlock = result.value;
+              peeks.push(nextBlock);
             }
           }
 
-          if (!comingBlock) {
-            minPresenceAhead = 0;
-          } else if (comingBlock.type === "relative") {
-            minPresenceAhead = Math.max(
-              minPresenceAhead - 1,
-              comingBlock.minPresenceAhead
-            );
-            groupHeight +=
-              comingBlock.height +
-              comingBlock.spacingTop +
-              (minPresenceAhead && comingBlock.spacingBottom);
+          if (!nextBlock) break;
+
+          if (nextBlock.type === "relative") {
+            accPresence = Math.max(accPresence - 1, nextBlock.minPresenceAhead);
+            accHeight += nextBlock.height;
+            accHeight += nextBlock.spacingTop;
+            accHeight += accPresence && nextBlock.spacingBottom;
           }
         }
 
@@ -77,9 +84,9 @@ export default function* placer({
           y += block.spacingTop;
         }
 
-        if (groupHeight > bodyHeight) {
+        if (accHeight > bodyHeight) {
           throw new BlockTooTallError();
-        } else if (groupHeight + y > footlessHeight) {
+        } else if (accHeight + y > footlessHeight) {
           for (const endAbsoluteEntries of endAbsoluteMap) {
             for (const endAbsoluteData of endAbsoluteEntries[1]) {
               yield {
@@ -136,8 +143,6 @@ export default function* placer({
       }
     }
 
-    if (!peeks.length) {
-      result = iterator.next();
-    }
+    block = peeks.shift() || iterator.next().value || null;
   }
 }
