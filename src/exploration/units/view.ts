@@ -18,6 +18,7 @@ export default function* viewUnit({
       },
       endBlockLabel: `${id}_${node.type.toUpperCase()}_SB`,
       label: `${id}_${node.type.toUpperCase()}_BG`,
+      startBlockLabel: `${id}_${node.type.toUpperCase()}_ST`,
       type: "absolute",
     };
   }

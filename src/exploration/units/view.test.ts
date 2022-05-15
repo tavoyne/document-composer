@@ -41,6 +41,7 @@ test("Outputs the proper blocks out of a single node.", () => {
       },
       endBlockLabel: "0_VIEW_SB",
       label: "0_VIEW_BG",
+      startBlockLabel: "0_VIEW_ST",
       type: "absolute",
     },
     {

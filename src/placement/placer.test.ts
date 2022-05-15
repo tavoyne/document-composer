@@ -184,6 +184,7 @@ test("Outputs the proper elements out of a minimal block list with background.",
       },
       endBlockLabel: "0_VIEW_SB",
       label: "0_VIEW_BG",
+      startBlockLabel: "0_VIEW_ST",
       type: "absolute",
     };
     yield {
@@ -262,6 +263,7 @@ test("Outputs the proper elements out of a minimal block list with background sp
       },
       endBlockLabel: "0_VIEW_SB",
       label: "0_VIEW_BG",
+      startBlockLabel: "0_VIEW_ST",
       type: "absolute",
     };
     yield {

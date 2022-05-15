@@ -4,6 +4,7 @@ export interface AbsoluteBlock {
   readonly element: Element;
   readonly endBlockLabel: string;
   readonly label: string;
+  readonly startBlockLabel: string;
   readonly type: "absolute";
 }
 
