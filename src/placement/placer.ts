@@ -17,8 +17,9 @@ export default function* placer({
   const bodyHeight = paperHeight - paperMarginBottom - paperMarginTop;
   const footlessHeight = paperHeight - paperMarginBottom;
 
-  const absoluteMap = new Map<string, [AbsoluteBlock, number][]>();
+  const endAbsoluteMap = new Map<string, [AbsoluteBlock, number][]>();
   const peeks: Block[] = [];
+  const startAbsoluteMap = new Map<string, AbsoluteBlock[]>();
 
   let pageIndex = 0;
   let result = iterator.next();
@@ -29,30 +30,12 @@ export default function* placer({
 
     switch (block.type) {
       case "absolute": {
-        let comingBlock: Block | undefined = peeks[0];
+        const blocks = startAbsoluteMap.get(block.startBlockLabel);
 
-        if (!comingBlock) {
-          comingBlock = iterator.next().value;
-          if (comingBlock) {
-            peeks.push(comingBlock);
-          }
-        }
-
-        const blockY =
-          y +
-          (y === paperMarginTop
-            ? 0
-            : (comingBlock &&
-                comingBlock.type === "relative" &&
-                comingBlock.spacingTop) ||
-              0);
-
-        const absoluteDatas = absoluteMap.get(block.endBlockLabel);
-
-        if (absoluteDatas) {
-          absoluteDatas.push([block, blockY]);
+        if (blocks) {
+          blocks.push(block);
         } else {
-          absoluteMap.set(block.endBlockLabel, [[block, blockY]]);
+          startAbsoluteMap.set(block.startBlockLabel, [block]);
         }
 
         break;
@@ -97,15 +80,15 @@ export default function* placer({
         if (groupHeight > bodyHeight) {
           throw new BlockTooTallError();
         } else if (groupHeight + y > footlessHeight) {
-          for (const absoluteEntries of absoluteMap) {
-            for (const absoluteData of absoluteEntries[1]) {
+          for (const endAbsoluteEntries of endAbsoluteMap) {
+            for (const endAbsoluteData of endAbsoluteEntries[1]) {
               yield {
-                ...absoluteData[0].element,
-                height: footlessHeight - absoluteData[1],
+                ...endAbsoluteData[0].element,
+                height: footlessHeight - endAbsoluteData[1],
                 pageIndex,
-                y: absoluteData[1],
+                y: endAbsoluteData[1],
               };
-              absoluteData[1] = paperMarginTop;
+              endAbsoluteData[1] = paperMarginTop;
             }
           }
           pageIndex += 1;
@@ -121,18 +104,30 @@ export default function* placer({
           };
         }
 
-        const absoluteDatas = absoluteMap.get(block.label);
-
-        if (absoluteDatas) {
-          for (const absoluteData of absoluteDatas) {
+        const endAbsoluteDatas = endAbsoluteMap.get(block.label);
+        if (endAbsoluteDatas) {
+          for (const endAbsoluteData of endAbsoluteDatas) {
             yield {
-              ...absoluteData[0].element,
-              height: y + block.height - absoluteData[1],
+              ...endAbsoluteData[0].element,
+              height: y + block.height - endAbsoluteData[1],
               pageIndex,
-              y: absoluteData[1],
+              y: endAbsoluteData[1],
             };
           }
-          absoluteMap.delete(block.label);
+          endAbsoluteMap.delete(block.label);
+        }
+
+        const blocks = startAbsoluteMap.get(block.label);
+        if (blocks) {
+          for (const block of blocks) {
+            const endAbsoluteDatas = endAbsoluteMap.get(block.endBlockLabel);
+            if (endAbsoluteDatas) {
+              endAbsoluteDatas.push([block, y]);
+            } else {
+              endAbsoluteMap.set(block.endBlockLabel, [[block, y]]);
+            }
+          }
+          startAbsoluteMap.delete(block.label);
         }
 
         y += block.height + block.spacingBottom;

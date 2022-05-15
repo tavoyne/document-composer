@@ -57,6 +57,93 @@ test("Breaks page when running into an overflowing block.", () => {
   ]);
 });
 
+test("Correctly places an absolute block starting on a breaking block.", () => {
+  const iterator = (function* (): IterableIterator<Block> {
+    yield {
+      height: 350,
+      label: "SPACER",
+      minPresenceAhead: 0,
+      spacingBottom: 0,
+      spacingTop: 0,
+      type: "relative",
+    };
+    yield {
+      element: {
+        color: [255, 0, 0, 1],
+        type: "rectangle",
+        width: 250,
+        x: 50,
+      },
+      endBlockLabel: "0_VIEW_SB",
+      label: "0_VIEW_BG",
+      startBlockLabel: "0_VIEW_ST",
+      type: "absolute",
+    };
+    yield {
+      height: 20,
+      label: "0_VIEW_ST",
+      minPresenceAhead: 1,
+      spacingBottom: 0,
+      spacingTop: 20,
+      type: "relative",
+    };
+    yield {
+      element: {
+        color: [0, 0, 0, 1],
+        font: {} as Font,
+        fontSize: 20,
+        text: "Lorem ipsum dolor sit amet.",
+        type: "text",
+        x: 50,
+      },
+      height: 20,
+      label: "1_TEXT_L0",
+      minPresenceAhead: 1,
+      spacingBottom: 0,
+      spacingTop: 0,
+      type: "relative",
+    };
+    yield {
+      height: 20,
+      label: "0_VIEW_SB",
+      minPresenceAhead: 0,
+      spacingBottom: 20,
+      spacingTop: 0,
+      type: "relative",
+    };
+  })();
+  const elements = [
+    ...placer({
+      iterator,
+      paperHeight: 500,
+      paperMarginBottom: 50,
+      paperMarginTop: 50,
+    }),
+  ];
+  assert.deepStrictEqual(elements, [
+    {
+      color: [0, 0, 0, 1],
+      font: {},
+      fontSize: 20,
+      height: 20,
+      pageIndex: 1,
+      text: "Lorem ipsum dolor sit amet.",
+      type: "text",
+      x: 50,
+      y: 70,
+    },
+    {
+      color: [255, 0, 0, 1],
+      height: 60,
+      pageIndex: 1,
+      type: "rectangle",
+      width: 250,
+      x: 50,
+      y: 50,
+    },
+  ]);
+});
+
 test("Does not break page when running into an overflowing spacing.", () => {
   const iterator = (function* (): IterableIterator<Block> {
     yield {
