@@ -17,27 +17,27 @@ export default function* placer({
   const bodyHeight = paperHeight - paperMarginBottom - paperMarginTop;
   const footlessHeight = paperHeight - paperMarginBottom;
 
-  const endAbsoluteMap = new Map<string, [AbsoluteBlock, number][]>();
   const peeks: Block[] = [];
-  const startAbsoluteMap = new Map<string, AbsoluteBlock[]>();
+  const scheduled = new Map<string, AbsoluteBlock[]>();
+  const underway = new Map<string, [AbsoluteBlock, number][]>();
 
+  let block: Block | null;
   let pageIndex: number;
   let y: number;
-  let block: Block | null;
 
+  block = iterator.next().value || null;
   pageIndex = 0;
   y = paperMarginTop;
-  block = iterator.next().value || null;
 
   while (block) {
     switch (block.type) {
       case "absolute": {
-        const blocks = startAbsoluteMap.get(block.startBlockLabel);
+        const blocks = scheduled.get(block.startBlockLabel);
 
         if (blocks) {
           blocks.push(block);
         } else {
-          startAbsoluteMap.set(block.startBlockLabel, [block]);
+          scheduled.set(block.startBlockLabel, [block]);
         }
 
         break;
@@ -88,7 +88,7 @@ export default function* placer({
         if (accHeight > bodyHeight) {
           throw new BlockTooTallError();
         } else if (accHeight + y > footlessHeight) {
-          for (const endAbsoluteEntries of endAbsoluteMap) {
+          for (const endAbsoluteEntries of underway) {
             for (const endAbsoluteData of endAbsoluteEntries[1]) {
               yield {
                 ...endAbsoluteData[0].element,
@@ -112,7 +112,7 @@ export default function* placer({
           };
         }
 
-        const endAbsoluteDatas = endAbsoluteMap.get(block.label);
+        const endAbsoluteDatas = underway.get(block.label);
         if (endAbsoluteDatas) {
           for (const endAbsoluteData of endAbsoluteDatas) {
             yield {
@@ -122,20 +122,20 @@ export default function* placer({
               y: endAbsoluteData[1],
             };
           }
-          endAbsoluteMap.delete(block.label);
+          underway.delete(block.label);
         }
 
-        const blocks = startAbsoluteMap.get(block.label);
+        const blocks = scheduled.get(block.label);
         if (blocks) {
           for (const block of blocks) {
-            const endAbsoluteDatas = endAbsoluteMap.get(block.endBlockLabel);
+            const endAbsoluteDatas = underway.get(block.endBlockLabel);
             if (endAbsoluteDatas) {
               endAbsoluteDatas.push([block, y]);
             } else {
-              endAbsoluteMap.set(block.endBlockLabel, [[block, y]]);
+              underway.set(block.endBlockLabel, [[block, y]]);
             }
           }
-          startAbsoluteMap.delete(block.label);
+          scheduled.delete(block.label);
         }
 
         y += block.height + block.spacingBottom;
