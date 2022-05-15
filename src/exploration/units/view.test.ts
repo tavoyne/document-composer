@@ -54,7 +54,7 @@ test("Outputs the proper blocks out of a single node.", () => {
     {
       height: 10,
       label: `0_VIEW_SB`,
-      minPresenceAhead: 2,
+      minPresenceAhead: 0,
       spacingBottom: 2,
       spacingTop: 0,
       type: "relative",

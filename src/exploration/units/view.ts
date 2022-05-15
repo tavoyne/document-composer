@@ -49,7 +49,7 @@ export default function* viewUnit({
     yield {
       height: node.paddingBottom,
       label: `${id}_${node.type.toUpperCase()}_SB`,
-      minPresenceAhead: 1 + node.minPresenceAhead,
+      minPresenceAhead: id === 0 ? 0 : 1 + node.minPresenceAhead,
       spacingBottom: node.marginBottom,
       spacingTop: 0,
       type: "relative",

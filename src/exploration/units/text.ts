@@ -46,7 +46,7 @@ export default function* textUnit({
   if (block) {
     yield {
       ...block,
-      minPresenceAhead: 1 + node.minPresenceAhead,
+      minPresenceAhead: id === 0 ? 0 : 1 + node.minPresenceAhead,
     };
   }
 }
