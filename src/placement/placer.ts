@@ -19,7 +19,7 @@ export default function* placer({
 
   const peeks: Block[] = [];
   const scheduled = new Map<string, AbsoluteBlock[]>();
-  const underway = new Map<string, [AbsoluteBlock, number][]>();
+  const underway = new Map<string, { block: AbsoluteBlock; y: number }[]>();
 
   let block: Block | null;
   let pageIndex: number;
@@ -81,24 +81,27 @@ export default function* placer({
           }
         }
 
+        if (accHeight > bodyHeight) {
+          throw new BlockTooTallError();
+        }
+
         if (y > paperMarginTop) {
           y += block.spacingTop;
         }
 
-        if (accHeight > bodyHeight) {
-          throw new BlockTooTallError();
-        } else if (accHeight + y > footlessHeight) {
-          for (const endAbsoluteEntries of underway) {
-            for (const endAbsoluteData of endAbsoluteEntries[1]) {
+        if (accHeight + y > footlessHeight) {
+          for (const [, underwayItems] of underway) {
+            for (const underwayItem of underwayItems) {
               yield {
-                ...endAbsoluteData[0].element,
-                height: footlessHeight - endAbsoluteData[1],
+                ...underwayItem.block.element,
+                height: footlessHeight - underwayItem.y,
                 pageIndex,
-                y: endAbsoluteData[1],
+                y: underwayItem.y,
               };
-              endAbsoluteData[1] = paperMarginTop;
+              underwayItem.y = paperMarginTop;
             }
           }
+
           pageIndex += 1;
           y = paperMarginTop;
         }
@@ -112,27 +115,32 @@ export default function* placer({
           };
         }
 
-        const endAbsoluteDatas = underway.get(block.label);
-        if (endAbsoluteDatas) {
-          for (const endAbsoluteData of endAbsoluteDatas) {
+        const underwayItems = underway.get(block.label);
+
+        if (underwayItems) {
+          for (const underwayItem of underwayItems) {
             yield {
-              ...endAbsoluteData[0].element,
-              height: y + block.height - endAbsoluteData[1],
+              ...underwayItem.block.element,
+              height: y + block.height - underwayItem.y,
               pageIndex,
-              y: endAbsoluteData[1],
+              y: underwayItem.y,
             };
           }
+
           underway.delete(block.label);
         }
 
-        const blocks = scheduled.get(block.label);
-        if (blocks) {
-          for (const block of blocks) {
-            const endAbsoluteDatas = underway.get(block.endBlockLabel);
-            if (endAbsoluteDatas) {
-              endAbsoluteDatas.push([block, y]);
+        const scheduledBlocks = scheduled.get(block.label);
+
+        if (scheduledBlocks) {
+          for (const scheduledBlock of scheduledBlocks) {
+            const underwayItems = underway.get(scheduledBlock.endBlockLabel);
+            if (underwayItems) {
+              underwayItems.push({ block: scheduledBlock, y });
             } else {
-              underway.set(block.endBlockLabel, [[block, y]]);
+              underway.set(scheduledBlock.endBlockLabel, [
+                { block: scheduledBlock, y },
+              ]);
             }
           }
           scheduled.delete(block.label);
