@@ -1,4 +1,4 @@
-import type { Block } from "../types/blocks.js";
+import type { AbsoluteBlock, Block } from "../types/blocks.js";
 import type { Element } from "../types/elements.js";
 import type { Placement } from "../types/placement.js";
 
@@ -18,8 +18,8 @@ export default function* placer({
   const bodyHeight = paperHeight - paperMarginBottom - paperMarginTop;
   const footlessHeight = paperHeight - paperMarginBottom;
 
+  const absoluteMap = new Map<string, [AbsoluteBlock, number][]>();
   const peeks: Block[] = [];
-  const absoluteMap = new Map<string, [Block, number][]>();
 
   let pageIndex = 0;
   let result = iterator.next();
@@ -27,14 +27,35 @@ export default function* placer({
 
   while (!result.done || peeks.length) {
     const block = peeks.shift() || (result.value as Block);
+
     switch (block.type) {
       case "absolute": {
-        const array = absoluteMap.get(block.endBlockLabel);
-        if (array) {
-          array.push([block, y]);
-        } else {
-          absoluteMap.set(block.endBlockLabel, [[block, y]]);
+        let comingBlock: Block | undefined = peeks[0];
+
+        if (!comingBlock) {
+          comingBlock = iterator.next().value;
+          if (comingBlock) {
+            peeks.push(comingBlock);
+          }
         }
+
+        const blockY =
+          y +
+          (y === paperMarginTop
+            ? 0
+            : (comingBlock &&
+                comingBlock.type === "relative" &&
+                comingBlock.spacingTop) ||
+              0);
+
+        const absoluteDatas = absoluteMap.get(block.endBlockLabel);
+
+        if (absoluteDatas) {
+          absoluteDatas.push([block, blockY]);
+        } else {
+          absoluteMap.set(block.endBlockLabel, [[block, blockY]]);
+        }
+
         break;
       }
       case "relative": {
@@ -48,10 +69,12 @@ export default function* placer({
 
           if (typeof peekIndex === "number") {
             comingBlock = peeks[peekIndex];
-            peekIndex = peeks.length - 1 - peekIndex || null;
+            peekIndex = peeks.length > peekIndex + 1 ? peekIndex + 1 : null;
           } else {
-            const { value } = iterator.next();
-            comingBlock = value && peeks.push(value);
+            comingBlock = iterator.next().value;
+            if (comingBlock) {
+              peeks.push(comingBlock);
+            }
           }
 
           if (!comingBlock) {
@@ -63,31 +86,33 @@ export default function* placer({
             );
             groupHeight +=
               comingBlock.height +
-              block.spacingTop +
-              (minPresenceAhead && block.spacingBottom);
+              comingBlock.spacingTop +
+              (minPresenceAhead && comingBlock.spacingBottom);
           }
         }
 
-        if (y !== paperMarginTop) {
+        if (y > paperMarginTop) {
           y += block.spacingTop;
         }
 
         if (groupHeight > bodyHeight) {
           throw new BlockTooTallError();
         } else if (groupHeight + y > footlessHeight) {
-          // THIS IS PAGE BREAK
-          // PRINT ALL ABSOLUTES BEFORE COMING BLOCK
-          // UNLESS THEY HAVE LOOKAHEAD... HOW DO WE DO? STORE THEM IN A PENDING ARRAY.
-          // KEEP TRACK OF THE LOOKAHEAD AMOUNT.
-          // KEEP LOOPING TILL LOOKAHEAD IS NOT REACHED.
-          // ONCE IT IS, EMPTY PENDING ARRAY.
+          for (const absoluteEntries of absoluteMap) {
+            for (const absoluteData of absoluteEntries[1]) {
+              yield {
+                ...absoluteData[0].element,
+                height: footlessHeight - absoluteData[1],
+                pageIndex,
+                y: absoluteData[1],
+              };
+              absoluteData[1] = paperMarginTop;
+            }
+          }
           pageIndex += 1;
           y = paperMarginTop;
         }
-        // WAS THIS THE ENDING BLOCK OF SOME ABSOLUTE(S) ?
-        // PRINT IT (THEM) HERE!
-        // HEIGHT_AHEAD WILL BE 0;
-        // SHOULD RETREIVE THE HEIGHT_BEHIND SOMEHOW.
+
         if (block.element) {
           yield {
             ...block.element,
@@ -96,7 +121,23 @@ export default function* placer({
             y,
           };
         }
+
+        const absoluteDatas = absoluteMap.get(block.label);
+
+        if (absoluteDatas) {
+          for (const absoluteData of absoluteDatas) {
+            yield {
+              ...absoluteData[0].element,
+              height: y + block.height - absoluteData[1],
+              pageIndex,
+              y: absoluteData[1],
+            };
+          }
+          absoluteMap.delete(block.label);
+        }
+
         y += block.height + block.spacingBottom;
+
         break;
       }
     }
