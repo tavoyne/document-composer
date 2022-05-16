@@ -6,7 +6,7 @@ import type { FontRegistry } from "../../types/fontRegistry.d.js";
 import type { TextNode } from "../../types/template.d.js";
 import textUnit from "./text.js";
 
-const fontRegistry: FontRegistry = {
+const fontRegistry = {
   list: [
     {
       getLineHeightAtSize(size: number) {
@@ -40,7 +40,7 @@ test("Outputs the proper blocks out of a single node with short text.", () => {
   const blocks = [
     ...textUnit({
       *explore() {},
-      fontRegistry,
+      fontRegistry: fontRegistry as unknown as FontRegistry,
       id: 0,
       maxWidth: 256,
       node: rootNode,
@@ -95,7 +95,7 @@ test("Outputs the proper blocks out of a single node with large text.", () => {
   const blocks = [
     ...textUnit({
       *explore() {},
-      fontRegistry,
+      fontRegistry: fontRegistry as unknown as FontRegistry,
       id: 0,
       maxWidth: 256,
       node: rootNode,
