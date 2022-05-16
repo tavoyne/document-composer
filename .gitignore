@@ -5,6 +5,7 @@
 # Folders
 !/.vscode
 !/assets
+!/declarations
 !/src
 
 # Files

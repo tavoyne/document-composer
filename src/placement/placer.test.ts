@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-// @ts-ignore
 import test from "node:test";
 
 import { Block } from "../types/blocks.d.js";

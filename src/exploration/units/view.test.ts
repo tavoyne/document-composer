@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-// @ts-ignore
 import test from "node:test";
 
 import type { FontRegistry } from "../../types/fontRegistry.d.js";
