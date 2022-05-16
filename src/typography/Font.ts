@@ -1,7 +1,8 @@
 import type { Font as FontkitFont } from "@pdf-lib/fontkit";
 import fontkit from "@pdf-lib/fontkit";
-import type { Font as IFont } from "../types/font.js";
-import type { FontLocator, FontSource } from "../types/template.js";
+
+import type { FontLocator, FontSource } from "../types/template.d.js";
+import type { Font as IFont } from "../types/typography.d.js";
 
 export default class Font implements IFont {
   readonly #fontkitFont: FontkitFont;

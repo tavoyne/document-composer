@@ -1,5 +1,5 @@
-import type { FontRegistry as IFontRegistry } from "../types/fontRegistry.js";
-import type { FontLocator, FontSource } from "../types/template.js";
+import type { FontLocator, FontSource } from "../types/template.d.js";
+import type { FontRegistry as IFontRegistry } from "../types/typography.d.js";
 import Font from "./Font.js";
 
 export default class FontRegistry implements IFontRegistry {

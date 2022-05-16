@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import type { FontRegistry } from "../../types/fontRegistry.d.js";
 import type { TextNode } from "../../types/template.d.js";
+import type { FontRegistry } from "../../types/typography.d.js";
 import textUnit from "./text.js";
 
 const fontRegistry = {

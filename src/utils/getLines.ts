@@ -14,6 +14,7 @@ export default function* getLines(
   for (const match of text.matchAll(/\S+/g)) {
     const word = match[0];
     const wordWidth = getTextWidth(word);
+
     if (currentLine.text) {
       if (currentLine.width + spaceWidth + wordWidth > maxWidth) {
         yield { ...currentLine };

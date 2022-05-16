@@ -22,12 +22,9 @@ export interface Template {
   rootNode: Node;
 }
 
-export interface TextNode {
+export interface TextNode extends FontLocator {
   readonly color: [number, number, number, number];
-  readonly fontFamily: string;
   readonly fontSize: number;
-  readonly fontStyle: "normal" | "italic";
-  readonly fontWeight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
   readonly minPresenceAhead: number;
   readonly text: string;
   readonly textAlign: "center" | "left" | "right";

@@ -1,4 +1,12 @@
-import type { Font } from "./font.d.js";
+import type { Font } from "./typography.d.js";
+
+export type PlacedElement = Element & Placement;
+
+export interface Placement {
+  readonly height: number;
+  readonly pageIndex: number;
+  readonly y: number;
+}
 
 export interface RectangleElement {
   readonly color: [number, number, number, number];

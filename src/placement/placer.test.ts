@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { Block } from "../types/blocks.d.js";
-import { Font } from "../types/font.d.js";
+import type { Block } from "../types/blocks.d.js";
+import type { Font } from "../types/typography.d.js";
 import { BlockTooTallError } from "./errors.js";
 import placer from "./placer.js";
 

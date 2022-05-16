@@ -1,10 +1,8 @@
 import fontkit from "@pdf-lib/fontkit";
 import type { PDFFont } from "pdf-lib";
 
-import type { Element } from "../types/elements.d.js";
-import type { Font } from "../types/font.d.js";
-import type { FontRegistry } from "../types/fontRegistry.d.js";
-import type { Placement } from "../types/placement.d.js";
+import type { PlacedElement } from "../types/elements.d.js";
+import type { Font, FontRegistry } from "../types/typography.d.js";
 
 export default async function renderToPDF({
   fontRegistry,
@@ -13,7 +11,7 @@ export default async function renderToPDF({
   paperWidth,
 }: {
   fontRegistry: FontRegistry;
-  pages: (Element & Placement)[][];
+  pages: PlacedElement[][];
   paperHeight: number;
   paperWidth: number;
 }): Promise<Uint8Array> {

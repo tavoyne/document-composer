@@ -1,6 +1,5 @@
 import type { AbsoluteBlock, Block } from "../types/blocks.d.js";
-import type { Element } from "../types/elements.d.js";
-import type { Placement } from "../types/placement.d.js";
+import type { Element, Placement } from "../types/elements.d.js";
 import { BlockTooTallError } from "./errors.js";
 
 export default function* placer({
