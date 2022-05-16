@@ -18,5 +18,7 @@
 
 # Generated
 !/.yarn
+!/.yarn/plugins
+!/.yarn/plugins/**/*
 !/.yarn/releases
 !/.yarn/releases/**/*
