@@ -3,5 +3,11 @@
     "module": "NodeNext",
     "strict": true,
     "target": "ES2020"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "ESNext"
+    },
+    "transpileOnly": true
   }
 }
